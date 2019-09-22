@@ -1,0 +1,192 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0" name="viewport">
+  <meta content="yes" name="apple-mobile-web-app-capable">
+  <meta content="yes" name="apple-touch-fullscreen">
+  <meta content="black" name="apple-mobile-web-app-status-bar-style">
+  <title>空白</title>
+  <style>
+  *{margin:0;padding:0;}
+  html,body{width:100%;height:100%;position:relative;}
+  .res-list-wrap{
+    width:100%;
+  }
+  .edit-tool{
+    height:40px;
+    width:100%;
+    background: #fafafa;
+    position:fixed;
+    bottom:0;
+  }
+  .res-list{
+    width:100%;
+    padding-bottom:40px;
+    margin-top: 10px;
+    list-style: none;
+    overflow: hidden;
+  }
+  .res-item{
+    float: left;
+    width: 25%;
+    height: 40px;
+    line-height: 40px;
+    color: #38f;
+    box-sizing: border-box;
+    border: 1px solid #f1f1f1;
+  }
+  .res-ipt{
+    display: block;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    font-size: 16px;
+    border: none;
+  }
+  .btn{
+    width:100%;
+    box-sizing: border-box;
+    height:100%;
+    float: left;
+    border:1px solid #ffffff;
+    color:#fff;
+    font-size:15px;
+    background: #f56c6c;
+  }
+  .words{
+    display: flex;
+    box-sizing: border-box;
+    flex-wrap:  wrap ;
+    border:none;
+    color:#fff;
+    font-size:15px;
+  }
+  .word-btn{
+    width:25%;
+    height:40px;
+    box-sizing: border-box;
+    float: left;
+    border:1px solid #ffffff;
+    color:#fff;
+    font-size:15px;
+    background: #f56c6c;
+  }
+  .build-ward{
+    height: 40px;
+    width:100%;
+  }
+  .title{
+    text-align: center;
+    padding-bottom: 10px;
+  }
+  </style>
+</head>
+<body>
+  <div></div>
+  <div class="res-list-wrap" id="Jres">
+    <div class="words">
+      <button class="word-btn" id="⁠" onClick="chooce('\u2060')">\u2060</button>
+      <button class="word-btn" id="⁡" onClick="chooce('\u2061')">\u2061</button>
+      <button class="word-btn" id="⁢" onClick="chooce('\u2062')">\u2062</button>
+      <button class="word-btn" id="⁣" onClick="chooce('\u2063')">\u2063</button>
+      <button class="word-btn" id="ㅤ" onClick="chooce('\u3164')">\u3164</button>
+    </div>
+    <div class="build-ward">
+      <button class="btn" onClick="build()">生成</button>
+    </div>
+    <div class="edit-tool">
+      <button class="btn no-effi" id="noEffiBtn" onClick="noEffiBtn()">失效</button>
+    </div>
+    <ol class="res-list" id="Jol"></ol>
+  </div>
+  <script>
+    var idStr = '';
+    var words = [];
+    var noEffiIds = [];
+
+    function doExchange(arr, depth){
+        for (var i = 0; i < arr[depth].length; i++) {
+            word[depth] = arr[depth][i]
+            if (depth != arr.length - 1) {
+                doExchange(arr, depth + 1)
+            } else {
+                results.push(word.join(""))
+            }
+        }
+    };
+    function sort(arr){
+        results = [];
+        word = [];
+        doExchange(arr, 0);
+        console.log(results.length, results);
+    };
+
+    function selectId(x){
+      idStr = '';
+      var val = document.getElementById(x).value;
+      idStr = val;
+    }
+
+    function chooce(word){
+      if(words.length<6){ 
+        words.push(word);
+        document.getElementById(word).style.background = "#81d741"
+      }
+      console.log(words,"words");
+    }
+
+    var strW = [
+      words,
+      words,
+      words,
+      words,
+      words,
+      words
+    ];
+
+    function build(){  
+      if(words.length>0){
+        sort(strW);
+        //插入生成的字符
+        var _html = '<h6 class="title">-------生成的代码-------</h6>';
+        for (var i = 0; i < results.length; i++) {
+          _html+='<li class="res-item"><input onfocus="selectId(this.id)" class="res-ipt" id="'+results[i]+'" type="text" value="'+ unescape(results[i]) +'"></li>';
+        };
+        Jol.innerHTML = _html;
+        var localIds = localStorage.getItem("noEffiIds") || "";
+        var noEffiIds = localIds ? localIds.split(',') : [];
+        setColor();
+      }
+    }
+
+
+    function setColor(){
+      var localIds = localStorage.getItem("noEffiIds") || "";
+      var noEffiIds = localIds ? localIds.split(',') : [];
+      // console.log(noEffiIds);
+      if(noEffiIds[0]){
+        noEffiIds.forEach((item,index)=>{
+          document.getElementById(item).style.background = "#cccccc";
+        }); 
+      }
+    };
+
+    function noEffiBtn(){
+      var localIds = localStorage.getItem("noEffiIds") || "";
+      if (idStr && localIds.indexOf(idStr.toString()) == -1 ) {
+        noEffiIds.push(idStr);
+        localStorage.setItem("noEffiIds", noEffiIds);
+      }else{
+        console.log('已存在'+idStr);
+      };
+      if(localIds){
+        setColor();
+      }
+    };
+
+
+  </script>
+</body>
+</html>
