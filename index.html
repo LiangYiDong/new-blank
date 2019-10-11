@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -92,6 +91,8 @@
       <button class="word-btn" id="⁢" onClick="chooce('\u2062')">\u2062</button>
       <button class="word-btn" id="⁣" onClick="chooce('\u2063')">\u2063</button>
       <button class="word-btn" id="ㅤ" onClick="chooce('\u3164')">\u3164</button>
+      <button class="word-btn" id="​" onClick="chooce('\u200b')">\u200b</button>
+      <button class="word-btn" id="" onClick="chooce('\u007f')">\u007f</button>
     </div>
     <div class="build-ward">
       <button class="btn" onClick="build()">生成</button>
@@ -165,10 +166,9 @@
     function setColor(){
       var localIds = localStorage.getItem("noEffiIds") || "";
       var noEffiIds = localIds ? localIds.split(',') : [];
-      // console.log(noEffiIds);
-      if(noEffiIds[0]){
+      if(noEffiIds.length>0){
         noEffiIds.forEach((item,index)=>{
-          document.getElementById(item).style.background = "#cccccc";
+          document.getElementById(item)?document.getElementById(item).style.background = "#cccccc":"";
         }); 
       }
     };
